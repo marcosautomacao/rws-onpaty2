@@ -1,0 +1,63 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  rws-onparty-customer:
+    #image: comanda
+    container_name: rws-onparty-customer
+    build:
+      context: rws-onparty-customer
+    ports:
+      - '8083:8080'
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 5s
+    networks:
+      - comanda
+
+  rws-onparty-supplier:
+    #image: comanda
+    container_name: rws-onparty-supplier
+    build:
+      context: rws-onparty-supplier
+    ports:
+      - '8082:8080'
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 5s
+    networks:
+      - comanda
+  rws-onparty-middleware:
+      #image: comanda
+      container_name: rws-onparty-middleware
+      build:
+        context: rws-onparty-middleware
+      ports:
+        - '8081:8080'
+      deploy:
+        restart_policy:
+            condition: on-failure
+            delay: 5s
+      networks:
+        - comanda
+  dbpostgresql:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=onparty-customers
+  dbpostgresql2:
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=onparty-suppliers
+
+networks:
+  comanda:

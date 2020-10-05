@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
-    private String server = "https://rws-onparty-supplier.herokuapp.com/v1/suppliers/";
+    private String server = "http://rws-onparty-suppliers/v1/suppliers/";
 
     @Override
     public List<SupplierDTO> findAll() {

@@ -8,7 +8,7 @@ class FornecedorService {
     consultaFornecedor(cnpj) {
         console.log("dentro do consulta cliente = "+cnpj);
         return new Promise((resolve, reject) => {
-            this._http.getF('https://rws-onparty-middleware.herokuapp.com/v1/suppliers/cnpj/'+cnpj).then
+            this._http.getF('v1/suppliers/cnpj/'+cnpj).then
                 (objeto => {
                     resolve(new Fornecedor(objeto._id, objeto._cnpj, objeto._name, objeto._email, objeto._address, objeto._number, objeto._addressComplement, objeto._telephone, objeto._cep, objeto._status))
                     console.log("retornando da consulta fornecedor");
@@ -26,7 +26,7 @@ class FornecedorService {
 
         console.log("dentro do incluir fornecedor no FornecedorService");
 
-        let url = "https://rws-onparty-middleware.herokuapp.com/v1/suppliers"
+        let url = "v1/suppliers"
 
         var data = {};
         data.address = address;

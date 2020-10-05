@@ -1,63 +1,102 @@
-# Use postgres/example user/password credentials
 version: '3.1'
 
 services:
-  rws-onparty-customer:
-    #image: comanda
-    container_name: rws-onparty-customer
-    build:
-      context: rws-onparty-customer
+  visualizador:
+    image: dockersamples/visualizer
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
-      - '8083:8080'
+    - 8080:8080
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+  front-end:
+    image: nginx
+    container_name: front-end
+    ports:
+      - '8084:80'
+    volumes: 
+      - C:/Users/Zupper/Desktop/Projects/on-paty/front-microservicos/:/usr/share/nginx/html
+      - C:/Users/Zupper/Desktop/Projects/on-paty/front-microservicos/nginx.conf/:/etc/nginx/conf.d/default.conf
     deploy:
       restart_policy:
-          condition: on-failure
-          delay: 5s
+        condition: on-failure
+        delay: 5s
     networks:
       - comanda
 
-  rws-onparty-supplier:
-    #image: comanda
-    container_name: rws-onparty-supplier
-    build:
-      context: rws-onparty-supplier
-    ports:
-      - '8082:8080'
-    deploy:
-      restart_policy:
-          condition: on-failure
-          delay: 5s
-    networks:
-      - comanda
   rws-onparty-middleware:
-      #image: comanda
       container_name: rws-onparty-middleware
-      build:
-        context: rws-onparty-middleware
+      image: maven:3.3-jdk-8
       ports:
         - '8081:8080'
+      volumes: 
+        - C:/Users/Zupper/Desktop/Projects/on-paty/rws-onparty-middleware:/usr/src/app
+        - C:/Users/Zupper/.m2:/root/.m2
+      working_dir: /usr/src/app
       deploy:
         restart_policy:
             condition: on-failure
             delay: 5s
       networks:
         - comanda
-  dbpostgresql:
+      entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
+
+  rws-onparty-customer:
+      container_name: rws-onparty-customer
+      image: maven:3.3-jdk-8
+      ports:
+        - '8083:8080'
+      volumes: 
+        - C:/Users/Zupper/Desktop/Projects/on-paty/rws-onparty-customer:/usr/src/app
+        - C:/Users/Zupper/.m2:/root/.m2
+      working_dir: /usr/src/app
+      deploy:
+        restart_policy:
+            condition: on-failure
+            delay: 5s
+      networks:
+        - comanda
+      entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
+  rws-onparty-supplier:
+      container_name: rws-onparty-supplier
+      image: maven:3.3-jdk-8
+      ports:
+        - '8082:8080'
+      volumes: 
+        - C:/Users/Zupper/Desktop/Projects/on-paty/rws-onparty-supplier:/usr/src/app
+        - C:/Users/Zupper/.m2:/root/.m2
+      working_dir: /usr/src/app
+      deploy:
+        restart_policy:
+            condition: on-failure
+            delay: 5s
+      networks:
+        - comanda
+      entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
+  db-suppliers:
     image: postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=onparty-customers
-  dbpostgresql2:
+      - POSTGRES_DB=onparty-suppliers
+    networks:
+      - comanda
+  db-customers:
     image: postgres
     ports:
-      - "5433:5432"
+      - "5452:5432"
     environment:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=onparty-suppliers
+      - POSTGRES_DB=onparty-customers
+    networks:
+      - comanda
 
 networks:
   comanda:
+    external: true

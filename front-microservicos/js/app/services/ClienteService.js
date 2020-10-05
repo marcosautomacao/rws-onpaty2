@@ -8,7 +8,7 @@ class ClienteService {
     consultaCliente(cpf) {
         console.log("dentro do consulta cliente = "+cpf);
         return new Promise((resolve, reject) => {
-            this._http.get('https://rws-onparty-middleware.herokuapp.com/v1/customers/cnpj/'+cpf).then
+            this._http.get('v1/customers/cnpj/'+cpf).then
                 (objeto => {
                     resolve(new Cliente(objeto._id, objeto._cpf, objeto._name, objeto._email, objeto._address, objeto._number, objeto._addressComplement, objeto._telephone, objeto._cep, objeto._status))
                     console.log("retornando da consulta cliente");
@@ -26,7 +26,7 @@ class ClienteService {
 
         console.log("dentro do incluir cliente no ClienteService");
 
-        let url = "https://rws-onparty-middleware.herokuapp.com/v1/customers"
+        let url = "v1/customers"
 
         var data = {};
         data.id = 0;

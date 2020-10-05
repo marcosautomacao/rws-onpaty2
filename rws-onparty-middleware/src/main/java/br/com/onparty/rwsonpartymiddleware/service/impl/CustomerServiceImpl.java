@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private String server = "https://rws-onparty-customer.herokuapp.com/v1/customers/";
+    private String server = "http://rws-onparty-customer:8083/v1/customers/";
 
     @Override
     public List<CustomerDTO> findAll() {

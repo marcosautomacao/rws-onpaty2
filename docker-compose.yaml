@@ -14,7 +14,7 @@ services:
         condition: on-failure
         delay: 5s
     networks:
-      - comanda
+      - net
 
   rws-onparty-middleware:
       container_name: rws-onparty-middleware
@@ -30,7 +30,7 @@ services:
             condition: on-failure
             delay: 5s
       networks:
-        - comanda
+        - net
       entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
 
   rws-onparty-customer:
@@ -47,7 +47,7 @@ services:
             condition: on-failure
             delay: 5s
       networks:
-        - comanda
+        - net
       entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
   rws-onparty-supplier:
       container_name: rws-onparty-supplier
@@ -63,7 +63,7 @@ services:
             condition: on-failure
             delay: 5s
       networks:
-        - comanda
+        - net
       entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
   db-suppliers:
     image: postgres
@@ -74,7 +74,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=onparty-suppliers
     networks:
-      - comanda
+      - net
   db-customers:
     image: postgres
     ports:
@@ -84,7 +84,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=onparty-customers
     networks:
-      - comanda
+      - net
 
 networks:
-  comanda:
+  net:
+    external: true

@@ -1,6 +1,16 @@
 version: '3.1'
 
 services:
+  visualizador:
+    image: dockersamples/visualizer
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+    - 8079:8080
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
   front-end:
     image: nginx
     container_name: front-end

@@ -17,8 +17,8 @@ services:
     ports:
       - '8084:80'
     volumes: 
-      - "${PWD}/front-microservicos/:/usr/share/nginx/html/"
-      - "${PWD}/front-microservicos/nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "./front-microservicos:/usr/share/nginx/html/"
+      - "./front-microservicos/nginx.conf:/etc/nginx/conf.d/default.conf"
     deploy:
       restart_policy:
         condition: on-failure

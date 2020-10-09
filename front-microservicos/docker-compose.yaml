@@ -1,17 +1,28 @@
-# Use postgres/example user/password credentials
-version: '3.1'
+version: '3'
 
 services:
-
-  dbpostgresql:
-    image: postgres
+  #visualizador:
+  #  image: dockersamples/visualizer
+  #  volumes:
+  #  - "/var/run/docker.sock:/var/run/docker.sock"
+  #  ports:
+  #  - 8079:8080
+  #  deploy:
+  #    placement:
+  #      constraints:
+  #        - node.role == manager
+  front-end:
+    image: nginx
     ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_USER=postgres
-    entrypoint:
-      sh -c "
-        echo 'CREATE DATABASE IF NOT EXISTS firstDB; CREATE DATABASE IF NOT EXISTS secondDB;'
-         --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-      "
+      - '8084:80'
+    volumes: 
+      - "C:/Users/Zupper/Desktop/Projects/on-paty/front-microservicos:/usr/share/nginx/html/"
+      - "C:/Users/Zupper/Desktop/Projects/on-paty/front-microservicos/nginx.conf:/etc/nginx/conf.d/default.conf"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+    networks:
+      - net
+networks: 
+    net:

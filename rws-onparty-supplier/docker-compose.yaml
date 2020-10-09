@@ -1,36 +1,17 @@
-version: '3.1'
+version: '3'
 
 services:
-  rws-onparty-supplier:
-    image: maven:3.3-jdk-8
-    ports:
-      - '8070:8080'
-    depends_on:
-      - db
-    volumes: 
-      - C:/Users/Zupper/Desktop/Projects/on-paty/rws-onparty-supplier:/usr/src/app
-      - C:/Users/Zupper/.m2:/root/.m2
-    working_dir: /usr/src/app
-    deploy:
-      restart_policy:
-          condition: on-failure
-          delay: 5s
-    entrypoint: ["mvn", "clean", "install", "spring-boot:run"]
-    networks:
-      - comanda
-  db:
-    container_name: pgdb
+  db-suppliers:
+    container_name: db-suppliers
     image: postgres
     ports:
-      - "8073:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
       - POSTGRES_DB=onparty-suppliers
     networks:
-      - comanda
-
+      - net
+ 
 networks:
-  comanda:
-    driver: bridge
-
+  net:

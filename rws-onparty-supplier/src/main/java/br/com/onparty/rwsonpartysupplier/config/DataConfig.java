@@ -7,13 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-//@Configuration
 public class DataConfig {
 
     @Bean
     public BasicDataSource dataSource() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
+        URI dbUri = new URI("asdasdasdasd:12312");
+        
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
         String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";

@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  rws-onparty-customer:
+    container_name: rws-onparty-customer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: customer
+    ports:
+      - "8083:8083"
+    networks:
+      - net
+    
+  db-suppliers:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=onparty-suppliers
+    networks:
+      - net
+  db-customers:
+    image: postgres
+    ports:
+      - "5452:5432"
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=onparty-customers
+    networks:
+      - net
+
+networks:
+  net:
+    # external: true

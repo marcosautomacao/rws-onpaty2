@@ -3,9 +3,9 @@ version: '3'
 services:
   front-end:
     container_name: front-end
-    #build:
-    #  context: ./front-microservicos
-    #  dockerfile: Dockerfile
+    build:
+      context: ./front-microservicos
+      dockerfile: Dockerfile
     image: onparty/front-img
     ports:
       - '8084:80'
@@ -17,9 +17,9 @@ services:
 
   rws-onparty-middleware:
     container_name: rws-onparty-middleware
-    # build:
-    #  context: ./rws-onparty-middleware
-    #  dockerfile: Dockerfile
+    build:
+     context: ./rws-onparty-middleware
+     dockerfile: Dockerfile
     image: onparty/middleware-img
     ports:
       - '8081:8081'
@@ -28,45 +28,34 @@ services:
           condition: on-failure
     networks:
       - net
-  #rws-onparty-supplier:
-  #  container_name: rws-onparty-supplier
-  #  build:
-  #    context: ./rws-onparty-supplier
-  #    dockerfile: Dockerfile
-  #  image: onparty/supplier-img
-  #  depends_on:
-  #    - db-suppliers
-  #  restart: always
-  #  ports:
-  #    - '8082:8082'
-  #  deploy:
-  #    restart_policy:
-  #        condition: on-failure
-  #  networks:
-  #    - net
-#
-  #db-suppliers:
-  #  container_name: db-suppliers
-  #  image: postgres
-  #  ports:
-  #    - "5432:5432"
-  #  environment:
-  #    - POSTGRES_PASSWORD=123
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_DB=onparty-suppliers
-  #  networks:
-  #    - net
-#
-  #db-customers:
-  #  image: postgres
-  #  ports:
-  #    - "5452:5432"
-  #  environment:
-  #    - POSTGRES_PASSWORD=123
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_DB=onparty-customers
-  #  networks:
-  #    - net
+
+  rws-onparty-supplier:
+    container_name: rws-onparty-supplier
+    build:
+     context: ./rws-onparty-supplier-node
+     dockerfile: Dockerfile
+    image: onparty/supplier-img
+    ports:
+      - '3000:3000'
+    deploy:
+      restart_policy:
+          condition: on-failure
+    networks:
+      - net
+  
+  db-suppliers:
+    container_name: db-suppliers
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./rws-onparty-supplier-node/init.sql:/docker-entrypoint-initdb.d/1-schema.sql
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=onparty-suppliers
+    networks:
+      - net
 
 networks:
   net:
